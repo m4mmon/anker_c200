@@ -229,6 +229,25 @@ adb shell flash_eraseall /dev/mtd0
 ```
 This was suggested by [gtxaspec](https://github.com/gtxaspec), thanks.
 
+Reboot the camera, and flash the firmware.
+
+When done, the camera should show up as a network interface :
+
+```bash
+ip link
+...
+5: enx02ceca7b4881: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 02:ce:ca:7b:48:81 brd ff:ff:ff:ff:ff:ff
+...
+```
+
+Issue a:
+```bash
+sudo ip addr add 172.16.0.2/24 dev <your interface>
+```
+
+And the camera should become reachable through ssh/web @172.16.0.1.
+
 ## Original firmware info
 
 ### serial output at boot

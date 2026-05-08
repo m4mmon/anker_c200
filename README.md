@@ -19,7 +19,7 @@ If you still want to open the camera, here is what you can expect to see:
 
 ![side 1](img/main_01.jpg)
 
-You can get a serial console from those marked pads. No password asked, root.
+You can get a serial console from those marked pads (115200, 8 bit, 1 stop bit, no parity). No password asked, root.
 
 ![side 2](img/main_02.jpg)
 

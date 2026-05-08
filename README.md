@@ -100,9 +100,10 @@ You can find the script [here](scripts/build_adb_firmware.py).
 It extracts and patches some files:
 - config/uvc.config: I am not sure about that one. It looks like a default configuration file, and might be used if resetting the camera. Really not sure, in doubt, I decided to make the change there also.
 - init/app_init.sh: this script is executed at camera startup. It modifies the uvc.config (not the previous one, but the one actually used by the running system) in order to activate the Android Debug Bridge.
-The repacks a new OTA file that can be flashed to the camera with the other script.
+ 
+Then the script repacks a new OTA file that can be flashed to the camera with the AnkeC200_flashtool.py script.
 
-Once flashed, the camera can get a root shell by issuing:
+Once flashed, you can get a root shell by issuing:
 ```
 $ adb shell
 [root@Ingenic-uc1_1:modules]# uname -a

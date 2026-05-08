@@ -148,7 +148,8 @@ Linux Ingenic-uc1_1 3.10.14__isvp_swan_1.0__ #1 PREEMPT Sun Apr 23 17:09:25 CST 
 ## Building thingino
 
 https://thingino.com/
-https://github.com/themactep/thingino-firmware/tree/master
+
+https://github.com/themactep/thingino-firmware/
 
 The camera is not supported yet, some stuff is missing.
 As of today, there is no sound, and no autofocus (though focus can be manually set).

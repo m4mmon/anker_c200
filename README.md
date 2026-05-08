@@ -248,6 +248,14 @@ sudo ip addr add 172.16.0.2/24 dev <your interface>
 
 And the camera should become reachable through ssh/web @172.16.0.1.
 
+
+![Thingino on Anker C200](img/thingino_c200.jpg)
+
+To set the focus, from ssh use the script "dw9714-ctrl".
+In the screen shot, it was "dw9714-ctrl 65" (the lower the farther).
+
+
+
 ## Original firmware info
 
 ### serial output at boot

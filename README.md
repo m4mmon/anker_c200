@@ -95,3 +95,90 @@ I tested it with the downloaded OTA file at first. Success :)
 
 Thanks Anker, the OTA is not encrypted or anything. It can be extracted and rebuilt, exactly what we need to do.
 
+You can find the script [here](scripts/build_adb_firmware.py).
+
+It extracts and patches some files:
+- config/uvc.config: I am not sure about that one. It looks like a default configuration file, and might be used if resetting the camera. Really not sure, in doubt, I decided to make the change there also.
+- init/app_init.sh: this script is executed at camera startup. It modifies the uvc.config (not the previous one, but the one actually used by the running system) in order to activate the Android Debug Bridge.
+The repacks a new OTA file that can be flashed to the camera with the other script.
+
+Once flashed, the camera can get a root shell by issuing:
+```
+$ adb shell
+[root@Ingenic-uc1_1:modules]# uname -a
+Linux Ingenic-uc1_1 3.10.14__isvp_swan_1.0__ #1 PREEMPT Sun Apr 23 17:09:25 CST 2023 mips GNU/Linux
+[root@Ingenic-uc1_1:modules]# ps w
+  PID USER       VSZ STAT COMMAND
+    1 root      1824 S    init
+    2 root         0 SW   [kthreadd]
+    3 root         0 SW   [ksoftirqd/0]
+    4 root         0 SW   [kworker/0:0]
+    5 root         0 SW<  [kworker/0:0H]
+    6 root         0 SW   [kworker/u2:0]
+    7 root         0 SW   [rcu_preempt]
+    8 root         0 SW   [rcu_bh]
+    9 root         0 SW   [rcu_sched]
+   10 root         0 SW   [watchdog/0]
+   11 root         0 SW<  [khelper]
+   12 root         0 SW<  [writeback]
+   13 root         0 SW<  [bioset]
+   14 root         0 SW<  [kblockd]
+   15 root         0 SW   [kworker/0:1]
+   16 root         0 SW   [kswapd0]
+   17 root         0 SW   [fsnotify_mark]
+   18 root         0 SW<  [crypto]
+   32 root         0 SW<  [deferwq]
+   33 root         0 SW   [kworker/u2:1]
+   45 root      1812 S    telnetd
+   48 root         0 SWN  [jffs2_gcd_mtd2]
+   50 root      1824 S    /sbin/getty -L console 115200 vt100
+   52 root         0 SWN  [jffs2_gcd_mtd3]
+   88 root         0 SW   [irq/37-isp-m0]
+   90 root         0 SW   [irq/38-isp-w02]
+  111 root      165m S    ucamera
+  134 root         0 DW   [isp_fw_process]
+  140 root     11484 S    hid_update
+  143 root      3048 S    adbd
+  147 root      1824 S    /bin/sh -l
+  151 root      1816 R    ps w
+
+```
+
+## Building thingino
+
+https://thingino.com/
+https://github.com/themactep/thingino-firmware/tree/master
+
+The camera is not supported yet, some stuff is missing.
+As of today, there is no sound, and no autofocus (though focus can be manually set).
+
+So there is an experimental profile, but you'll have to build an image yourself.
+
+Follow the instructions to build a firmware on the thingino page or wiki.
+Instead of issuing the "make" command, you want to:
+```
+GROUP=exp make
+```
+and select the "anker_c200_t31x_sc500ai".
+
+Hopefully you'll get a file named "thingino-anker_c200_t31x_sc500ai.bin" at the end.
+
+## backup the original firmware
+
+TODO
+- dump the bootloader
+
+## Installing thingino
+
+There you have to take a leap of faith.
+
+If the camera fails to boot, it enters into a special "USB-boot" mode, allowing to read or write the flash chip contents.
+
+You can read everything about that [here](https://github.com/themactep/thingino-firmware/wiki/Ingenic-USB-Cloner).
+
+So, the idea is to make the system unbootable. To do this, simply erase the bootloader. ***WARNING: this makes the camera unusable*** until you flash something back on it with the cloner tool. So, to erase the bootloader:
+```
+adb shell flash_eraseall /dev/mtd0
+```
+This was suggested by [gtxaspec](https://github.com/gtxaspec), thanks.
+

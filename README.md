@@ -178,8 +178,41 @@ Hopefully you'll get a file named "thingino-anker_c200_t31x_sc500ai.bin" at the 
 
 ## backup the original firmware
 
-TODO
-- dump the bootloader
+I have not found a perfect way to do.
+
+Here is what I would do.
+
+First, backup as much as you can:
+```bash
+#!/bin/bash
+
+for i in $(seq 0 3)
+do
+   adb shell dd if=/dev/mtd${i} of=/tmp/mtd${i}.bin
+   adb pull /tmp/mtd${i}.bin
+   adb shell rm /tmp/mtd${i}.bin
+done
+```
+
+This will backup the mapped parts on the chip. However, this is incomplete, the last part, let's call it mtd4_ghost is not mapped, and I have not found a way to access it while the system is still usable (and the camera not opened).
+
+This part contains a kernel that is booted when performing the OTA update. So in theory, the camera with the restored firmware would work with it, but there might be some problems if you try to flash it, be it with the AnkerWorks app or the script...
+
+So...
+Once you destroy the bootloader, when the camera reboots and enter into the USB-boot mode, perform a full dump as explained in the Thingino wiki.
+
+You'll get a backup with an erased bootloader.
+
+And finally, you can reconstruct something "complete" by:
+
+```bash
+cat mtd0.bin <(tail -c +32769 dump.bin) > full_backup.bin
+```
+
+I tested that, the backup worked, the camera rebooted fine, I could perform once again an update with the script.
+
+But a little scary.
+
 
 ## Installing thingino
 
@@ -189,6 +222,7 @@ If the camera fails to boot, it enters into a special "USB-boot" mode, allowing 
 
 You can read everything about that [here](https://github.com/themactep/thingino-firmware/wiki/Ingenic-USB-Cloner).
 
+**do a backup before**
 So, the idea is to make the system unbootable. To do this, simply erase the bootloader. ***WARNING: this makes the camera unusable*** until you flash something back on it with the cloner tool. So, to erase the bootloader:
 ```
 adb shell flash_eraseall /dev/mtd0

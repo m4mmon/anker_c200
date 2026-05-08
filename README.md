@@ -13,6 +13,17 @@ What I thought then was, if I could get an official OTA file, if it could be mod
 But my camera was already at the latest firmware version and the AnkerWorks application would not let me get the OTA.
 
 
+## general info
+
+If you still want to open the camera, here is what you can expect to see:
+
+![side 1](img/main_01.jpg)
+
+You can get a serial console from those marked pads. No password asked, root.
+
+![side 2](img/main_02.jpg)
+
+
 ## Getting the OTA image
 
 This AnkerWorks windows PC application allows to set up the camera, and update it.

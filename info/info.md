@@ -171,7 +171,7 @@ jdwp_service.c::jdwp_control_init():jdwp control socket started (6)
 
 ```
 
-## dmesg (with ADB enabled, and kernek patched to show mtd4.
+## dmesg (with ADB enabled, and kernel patched to show mtd4.
 
 ```
 [    0.000000] Initializing cgroup subsys cpu

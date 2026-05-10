@@ -45,7 +45,7 @@ Open it and "pretty print" it, because it is minified.
 
 AnkerWorks gets to know if a device needs an update by sending a payload to a server with the device details like the product code and the firmware version.
 
-So what I did was set a breakpoint in the method "manuallyRequestNewVersion". In AnkerWorks, I went to the firmware part and clicked the firmware check button.
+So what I did was set a breakpoint in the method "manuallyRequestNewVersion". In AnkerWorks, I went to the "Firmware Info" part and clicked the "Check for Updates" button.
 
 The breakpoint was reached, and there I could access the object representing the camera and alter the version member by issuing the following in the debugging console:
 ```
@@ -112,7 +112,7 @@ It extracts and patches some files:
 - config/uvc.config: I am not sure about that one. It looks like a default configuration file, and might be used if resetting the camera. Really not sure, in doubt, I decided to make the change there also.
 - init/app_init.sh: this script is executed at camera startup. It modifies the uvc.config (not the previous one, but the one actually used by the running system) in order to activate the Android Debug Bridge.
  
-Then the script repacks a new OTA file that can be flashed to the camera with the AnkeC200_flashtool.py script.
+Then the script repacks a new OTA file that can be flashed to the camera with the AnkerC200_flashtool.py script.
 
 Once flashed, you can get a root shell by issuing:
 ```
@@ -153,7 +153,6 @@ Linux Ingenic-uc1_1 3.10.14__isvp_swan_1.0__ #1 PREEMPT Sun Apr 23 17:09:25 CST 
   143 root      3048 S    adbd
   147 root      1824 S    /bin/sh -l
   151 root      1816 R    ps w
-
 ```
 
 ## Building thingino
@@ -214,6 +213,17 @@ I tested that, the backup worked, the camera rebooted fine, I could perform once
 But a little scary.
 
 
+Another way would be to trust the stock firmware dump from [there](https://github.com/themactep/ipc-firmware/blob/master/anker_c200-t31x-sc500ai-stock.bin).
+
+Extract "mtd4" from it:
+```bash
+dd if=anker_c200-t31x-sc500ai-stock.bin of=mtd4.bin bs=1 skip=$((0xC40000))
+```
+
+Perform the backup of the visible parts mtd0 to mtd3 as shown earlier, and combine them with that mtd4 and you have a full backup while the camera is still working.
+
+Then once you decide to make the camera enter into USB-boot mode (by erasing mtd0), you still can get your own "mtd4" by using the read feature of the Ingenic cloner tool. It should be exactly the same.
+
 ## Installing thingino
 
 There you have to take a leap of faith.
@@ -229,7 +239,15 @@ adb shell flash_eraseall /dev/mtd0
 ```
 This was suggested by [gtxaspec](https://github.com/gtxaspec), thanks.
 
-Reboot the camera, and flash the firmware.
+Reboot the camera, it should enter into cloner mode:
+
+```bash
+lsusb
+...
+Bus 003 Device 004: ID a108:c309 Ingenic Semiconductor Co.,Ltd Ã         USB Boot Device
+...
+```
+Dump the flash (with an erased bootloader /dev/mtd0), and flash the firmware.
 
 When done, the camera should show up as a network interface :
 

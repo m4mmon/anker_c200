@@ -566,3 +566,19 @@ jdwp_service.c::jdwp_control_init():jdwp control socket started (6)
 [    1.568980] cgu_set_rate, parent = 1392000000, rate = 12288000, n = 3625, reg val = 0x22000e29
 [    8.824508] adb_open
 ```
+
+## newer OTA patch script
+[This script](scripts/build_adb_-_patched_kernel_firmware_v2.py) patches the OTA file as before (enabling ADB), but also patches the kernel in order to show the last part of the flash chip ("mtd4").
+That way it it possible to perform a full backup from adb:
+```bash
+#!/bin/bash
+
+for i in $(seq 0 4)
+do
+   adb shell dd if=/dev/mtd${i} of=/tmp/mtd${i}.bin
+   adb pull /tmp/mtd${i}.bin
+   adb shell rm /tmp/mtd${i}.bin
+done
+
+cat mtd0.bin mtd1.bin mtd2.bin mtd3.bin mtd4.bin > full_backup.bin
+```

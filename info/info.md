@@ -408,3 +408,79 @@ ioctl: VIDIOC_ENUM_FMT
                 Size: Discrete 320x240
                         Interval: Discrete 0.033s (30.000 fps)
 ```
+
+## clocks
+
+```
+[root@Ingenic-uc1_1:init]# cat /proc/jz/clock/clocks
+ID NAME       FRE        stat       count     parent
+--------------------------------------------------------
+ 1 ext0          0.032MHz  enable   0 root
+ 2 ext1         24.000MHz  enable   11 root
+ 3 otg_phy      48.000MHz  enable   0 root
+--------------------------------------------------------
+ 5 apll       1392.000MHz  enable   1 ext1
+ 6 mpll       1200.000MHz  enable   6 ext1
+ 7 vpll       1152.000MHz  enable   2 ext1
+ 8 sclka      1392.000MHz  enable   6 apll
+--------------------------------------------------------
+10 cclk       1392.000MHz  enable   0 sclka
+11 l2clk       696.000MHz  enable   0 sclka
+12 h0clk       200.000MHz  enable   3 mpll
+13 h2clk       200.000MHz  enable   6 mpll
+14 pclk        100.000MHz  enable   6 mpll
+15 msc          24.000MHz  enable   0 ext1
+--------------------------------------------------------
+17 cgu_isp     230.400MHz  enable   1 vpll
+18 cgu_cim      24.000MHz  enable   1 vpll
+19 cgu_ssi     200.000MHz  enable   2 mpll
+20 cgu_msc_mux 1392.000MHz disable   0 sclka
+21 cgu_i2s_spk   12.288MHz  enable   2 sclka
+22 cgu_i2s_mic   12.288MHz  enable   2 sclka
+23 cgu_msc1      2.718MHz disable   0 sclka
+24 cgu_msc0      2.718MHz disable   0 sclka
+25 cgu_lpc       4.500MHz disable   0 vpll
+26 cgu_macphy    4.687MHz disable   0 mpll
+27 cgu_vpu     400.000MHz  enable   1 mpll
+28 cgu_ddr     600.000MHz  enable   0 mpll
+29 cgu_rsa      75.000MHz disable   0 mpll
+--------------------------------------------------------
+31 ddr         200.000MHz  enable   0 h0clk
+32 tcu         100.000MHz  enable   0 pclk
+33 rtc         100.000MHz  enable   0 pclk
+34 des         100.000MHz  enable   0 pclk
+35 csi         100.000MHz  enable   1 pclk
+36 lcd         200.000MHz disable   0 h0clk
+37 isp         200.000MHz  enable   1 h0clk
+38 pdma        200.000MHz  enable   1 h2clk
+39 sfc         200.000MHz  enable   1 h2clk
+40 uart2        24.000MHz disable   0 ext1
+41 uart1        24.000MHz  enable   1 ext1
+42 uart0        24.000MHz disable   0 ext1
+43 sadc        100.000MHz  enable   0 pclk
+44 dmic        100.000MHz disable   0 pclk
+45 aic         100.000MHz  enable   1 pclk
+46 hash        200.000MHz disable   0 h2clk
+47 i2c1        100.000MHz disable   0 pclk
+48 i2c0        100.000MHz disable   0 pclk
+49 ssi0        150.000MHz  enable   0 cgu_ssi
+50 ssi1        150.000MHz disable   0 cgu_ssi
+51 ssi_slv     100.000MHz disable   0 pclk
+52 msc1        200.000MHz  enable   0 h2clk
+53 msc0        200.000MHz  enable   0 h2clk
+54 otg1        200.000MHz  enable   1 h2clk
+--------------------------------------------------------
+56 cpu          24.000MHz  enable   0 ext1
+57 apb0         24.000MHz  enable   0 ext1
+58 sys_ost      24.000MHz  enable   2 ext1
+59 ahb0         24.000MHz  enable   0 ext1
+--------------------------------------------------------
+61 riscv       200.000MHz  enable   0 h2clk
+62 aes         200.000MHz disable   0 h2clk
+63 rsa         100.000MHz disable   0 pclk
+64 ahb1         24.000MHz  enable   1 ext1
+65 gmac        200.000MHz disable   0 h2clk
+66 ipu         200.000MHz disable   0 h0clk
+67 dtrng       100.000MHz disable   0 pclk
+68 avpu        200.000MHz  enable   1 h0clk
+```
